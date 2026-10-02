@@ -43,13 +43,12 @@ def preprocess_input(raw, encoders):
     else:
         df["TenureGroup"] = 3
 
-    cat_cols = [c for c in df.columns if df[c].dtype == object]
-    for col in cat_cols:
-        if col in encoders:
-            le = encoders[col]
+    # Encode all categorical features defined in encoders directly
+    for col, le in encoders.items():
+        if col in df.columns:
             val = str(df[col].values[0])
             if val in le.classes_:
-                df[col] = le.transform([val])[0]
+                df[col] = int(le.transform([val])[0])
             else:
                 df[col] = 0
     return df
@@ -143,7 +142,7 @@ def main():
             for col in feature_columns:
                 if col not in input_df.columns:
                     input_df[col] = 0
-            input_df = input_df[feature_columns]
+            input_df = input_df[feature_columns].astype(np.float64)
             input_scaled = input_df.copy()
             scale_cols = list(getattr(scaler, "feature_names_in_", []))
             if not scale_cols:
