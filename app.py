@@ -6,6 +6,18 @@ import os
 
 st.set_page_config(page_title="Churn Predictor", page_icon="📡", layout="wide")
 
+# Hide Streamlit default input instruction helper ("Press Enter to submit form")
+st.markdown(
+    """
+    <style>
+    [data-testid="InputInstructions"] {
+        display: none !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ARTIFACTS_DIR = os.path.join(BASE_DIR, "artifacts")
 MODEL_PATH = os.path.join(ARTIFACTS_DIR, "churn_model.pkl")
