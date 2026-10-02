@@ -95,7 +95,7 @@ def main():
             contract = st.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
             payment_method = st.selectbox("Payment Method", ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"])
             monthly_charges = st.slider("Monthly Charges ($)", 18.0, 120.0, 65.0, step=0.5)
-            total_charges = st.number_input("Total Charges ($)", min_value=0.0, max_value=9000.0, value=float(monthly_charges * tenure))
+            total_charges = st.number_input("Total Charges ($)", min_value=0.0, max_value=15000.0, value=float(min(monthly_charges * tenure, 15000.0)), step=10.0)
             paperless = st.selectbox("Paperless Billing", ["Yes", "No"])
 
         with col3:
@@ -171,7 +171,7 @@ def main():
 
         with res3:
             st.markdown("**Risk Gauge**")
-            st.progress(int(churn_prob), text=f"Churn Risk: {churn_prob:.1f}%")
+            st.progress(min(max(float(probability[1]), 0.0), 1.0), text=f"Churn Risk: {churn_prob:.1f}%")
             if churn_prob < 30:
                 st.markdown("**Status: 🟢 Low Risk**")
             elif churn_prob < 60:
